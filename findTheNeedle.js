@@ -1,6 +1,6 @@
 //Building a recursive function that will go through an object's keys to look for a user-defined variable
 
-//object to test
+//Basic Object to Test
 //I'm putting the key/value pair 'check: true' at multiple levels so I can check for it!
 var cupboard = {
     fruit_1: "apple",
@@ -22,41 +22,55 @@ var cupboard = {
         name: "Jacob",
         age: 28,
         check: true
+    },
+    randomString: "good string",
+    randomNumber: 12,
+    randomArray: [1,2,"pre-blessed ham"],
+    randomObject: {
+        message: "Want to see how objectLevel works",    
     }
 }
 
-//function in place
 function findThe (needle, haystack) {
-    //console.log(haystack)
-    let objectLevel = 1;
-    let destructTerm = [];
-    //what if I don't pass in a string and wrap their object in an object?
+    //let objectLevel = 0;   -- Thought I might need to use this but have been able to work around it
+    let path = [];
+    let results = [];
+    let objExceptions = [];
 
     (function recurse(obj) {
-        console.log("recurse, baby!", objectLevel)
         for (let key in obj) {
-            console.log(objectLevel, key, typeof key)
-            if (typeof obj[key] == 'object' && Array.isArray(obj[key]) == false) {
-                console.log("i found an object! It's", key)
-                objectLevel++;
-                recurse(obj[key])
-                //if the value is an object...
-                /*
-
-                */
-
-                //objectLevel++;
-                //destructTerm.push(obj[key]);
-                //recurse(destructTerm.obj[key]);
+            //When you pass over a key, save it to the path array in case it holds more objects
+            path.push(key);
+            //Read where you're checking!
+            console.log("Searching path:", path.join('.'))
+            //if (key.toLowerCase().indexOf("local_storage_frame") > -1) {
+            if (obj[key] instanceof (HTMLElement || jQuery)) {
+                //Making exceptions here for troublesome items. Have yet to determine the best way to handle these.
+                console.log("Exception for HTML Element", path.join("."), key)
+            } else {
+                if (key.toLowerCase().indexOf(needle) > -1) {
+                    //console.log("Found", key, "at", path.join('.'),"and it equals", obj[key])
+                    var result = {key: key, path: path.join('.'), property: obj[key]}
+                    results.push(result)
+                }
+                if (typeof obj[key] == 'object' && Array.isArray(obj[key]) == false) {
+                    //objectLevel++;
+                    recurse(obj[key])
+                }
             }
-
+            
+            path.pop();
         }
-        objectLevel--;
-        console.log("Finished a recurse", objectLevel)
-    })(haystack)
-    
+        //objectLevel--;        
+    })(haystack)   
+    console.log(results);
+    return results;
 }
 
-//findThe(needleInThe, haystack);
-//Replace w/ what you're looking for and in what object!
-findThe("needleInThe", cupboard)
+//findThe("needleInThe" [string], haystack [object]);
+findThe("check", cupboard)
+
+
+//Searching path: bouncex.local_storage_frame.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.attributes.0.ownerElement.style.webkitBorderBottomRightRadius
+
+//bouncex.campaigns.1352310.eventTarget.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument.doctype.ownerDocument
